@@ -1,0 +1,307 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: #6366f1;
+  --primary-dark: #4f46e5;
+  --secondary-color: #8b5cf6;
+  --success-color: #10b981;
+  --danger-color: #ef4444;
+  --bg-gradient-start: #0f172a;
+  --bg-gradient-end: #1e293b;
+  --card-bg: rgba(30, 41, 59, 0.8);
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --border-color: rgba(99, 102, 241, 0.3);
+  --shadow-color: rgba(99, 102, 241, 0.2);
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(
+    135deg,
+    var(--bg-gradient-start) 0%,
+    var(--bg-gradient-end) 100%
+  );
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-primary);
+  padding: 20px;
+}
+
+.container {
+  width: 100%;
+  max-width: 800px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 40px;
+  animation: fadeInDown 0.8s ease-out;
+}
+
+header h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px var(--shadow-color);
+  transition: all 0.3s ease;
+}
+
+header h1:hover {
+  transform: scale(1.05);
+}
+
+.game-container {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--border-color);
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.hangman-image {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.hangman-image img {
+  max-width: 300px;
+  height: auto;
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.5));
+  transition: transform 0.3s ease;
+}
+
+.hangman-image img:hover {
+  transform: scale(1.05);
+}
+
+.word-display {
+  margin: 30px 0;
+  text-align: center;
+}
+
+#word-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 2.5rem;
+  font-weight: 600;
+  letter-spacing: 8px;
+  color: var(--text-primary);
+  min-height: 60px;
+}
+
+.letter-box {
+  display: inline-block;
+  min-width: 40px;
+  padding: 10px;
+  border-bottom: 4px solid var(--primary-color);
+  text-align: center;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.input-section {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin: 30px 0;
+}
+
+#letter-input {
+  width: 80px;
+  height: 60px;
+  font-size: 2rem;
+  text-align: center;
+  text-transform: uppercase;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.6);
+  color: var(--text-primary);
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+#letter-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 20px var(--shadow-color);
+  transform: scale(1.05);
+}
+
+#check-btn,
+#restart-btn {
+  padding: 15px 35px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  color: white;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px var(--shadow-color);
+}
+
+#check-btn:hover,
+#restart-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px var(--shadow-color);
+}
+
+#check-btn:active,
+#restart-btn:active {
+  transform: translateY(0);
+}
+
+#check-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.attempts-info {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+}
+
+#attempts-left {
+  font-weight: 700;
+  color: var(--primary-color);
+  font-size: 1.4rem;
+}
+
+.result-message {
+  text-align: center;
+  margin: 25px 0;
+  padding: 20px;
+  border-radius: 12px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  animation: slideIn 0.5s ease-out;
+}
+
+.result-message.win {
+  background: rgba(16, 185, 129, 0.2);
+  border: 2px solid var(--success-color);
+  color: var(--success-color);
+}
+
+.result-message.lose {
+  background: rgba(239, 68, 68, 0.2);
+  border: 2px solid var(--danger-color);
+  color: var(--danger-color);
+}
+
+.hidden {
+  display: none !important;
+}
+
+#restart-btn {
+  display: block;
+  margin: 20px auto 0;
+}
+
+/* Animaciones */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 2rem;
+  }
+
+  .game-container {
+    padding: 25px;
+  }
+
+  #word-container {
+    font-size: 1.8rem;
+    letter-spacing: 4px;
+    gap: 8px;
+  }
+
+  .letter-box {
+    min-width: 30px;
+    padding: 8px;
+  }
+
+  .input-section {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #letter-input {
+    width: 100%;
+    max-width: 200px;
+  }
+
+  #check-btn {
+    width: 100%;
+    max-width: 300px;
+  }
+}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>El Ahorcado - Hangman Game</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1 id="titulo">El Abogado<span id="titulo-final"></span></h1>
+      </header>
+
+      <main>
+        <div class="game-container">
+          <!-- Imagen del ahorcado -->
+          <div class="hangman-image">
+            <img id="hangman-img" src="images/Hangman-0.png" alt="Hangman" />
+          </div>
+
+          <!-- Palabra secreta con guiones -->
+          <div class="word-display">
+            <div id="word-container"></div>
+          </div>
+
+          <!-- Input y botón -->
+          <div class="input-section">
+            <input
+              type="text"
+              id="letter-input"
+              maxlength="1"
+              placeholder="_"
+              autocomplete="off"
+            />
+            <button id="check-btn">Comprobar Letra</button>
+          </div>
+
+          <!-- Intentos restantes -->
+          <div class="attempts-info">
+            <p>Intentos restantes: <span id="attempts-left">8</span></p>
+          </div>
+
+          <!-- Mensaje de resultado -->
+          <div id="result-message" class="result-message hidden"></div>
+
+          <!-- Botón de reinicio (oculto inicialmente) -->
+          <button id="restart-btn" class="hidden">Jugar de Nuevo</button>
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
