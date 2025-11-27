@@ -5,11 +5,12 @@
 
 /**
  * Carga el archivo JSON de palabras
+ * @param {string} archivo - Nombre del archivo JSON a cargar (por defecto: "words.json")
  * @returns {Promise<Array>} Array de palabras
  */
-export async function cargarPalabras() {
+export async function cargarPalabras(archivo = "words.json") {
   try {
-    const response = await fetch("words.json");
+    const response = await fetch(archivo);
     if (!response.ok) {
       throw new Error("Error al cargar el archivo JSON");
     }

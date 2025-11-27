@@ -24,6 +24,8 @@ let letrasDescubiertas = [];
 let intentosFallidos = 0;
 let juegoTerminado = false;
 let letrasUsadas = new Set();
+let currentTheme = 'general'; // Tema actual: 'general' o 'musica'
+let letrasIncorrectas = []; // Array de letras incorrectas
 
 // Elementos del DOM
 const wordContainer = document.getElementById('word-container');
@@ -35,14 +37,24 @@ const resultMessage = document.getElementById('result-message');
 const restartBtn = document.getElementById('restart-btn');
 const titulo = document.getElementById('titulo');
 const tituloFinal = document.getElementById('titulo-final');
+const themeGeneralBtn = document.getElementById('theme-general');
+const themeMusicaBtn = document.getElementById('theme-musica');
+const incorrectLettersContainer = document.getElementById('incorrect-letters-container');
 
 /**
  * Inicializa el juego
+ * @param {string} theme - Tema seleccionado ('general' o 'musica')
  */
-async function inicializarJuego() {
+async function inicializarJuego(theme = currentTheme) {
     try {
+        // Actualizar tema actual
+        currentTheme = theme;
+        
+        // Determinar archivo de palabras según el tema
+        const archivo = theme === 'musica' ? 'words2.json' : 'words.json';
+        
         // Cargar palabras del JSON
-        const palabras = await cargarPalabras();
+        const palabras = await cargarPalabras(archivo);
         
         // Obtener palabra aleatoria
         palabraSecreta = obtenerPalabraAleatoria(palabras);
@@ -53,6 +65,10 @@ async function inicializarJuego() {
         intentosFallidos = 0;
         juegoTerminado = false;
         letrasUsadas.clear();
+        letrasIncorrectas = [];
+        
+        // Actualizar título según el tema
+        actualizarTitulo();
         
         // Renderizar palabra inicial
         renderizarPalabra(letrasDescubiertas, wordContainer);
@@ -62,6 +78,9 @@ async function inicializarJuego() {
         
         // Resetear intentos
         actualizarIntentos();
+        
+        // Limpiar panel de letras incorrectas
+        renderizarLetrasIncorrectas();
         
         // Limpiar mensajes
         resultMessage.classList.add('hidden');
@@ -130,6 +149,10 @@ function procesarLetra() {
             intentosFallidos++;
             actualizarIntentos();
             
+            // Añadir a letras incorrectas
+            letrasIncorrectas.push(letraMayuscula);
+            renderizarLetrasIncorrectas();
+            
             // Actualizar imagen
             hangmanImg.src = obtenerImagenAhorcado(intentosFallidos);
             
@@ -147,6 +170,34 @@ function procesarLetra() {
         console.error('Error procesando letra:', error);
         mostrarError('Error al procesar la letra. Intenta de nuevo.');
     }
+}
+
+/**
+ * Actualiza el título según el tema actual
+ */
+function actualizarTitulo() {
+    const tituloBase = currentTheme === 'musica' ? 'El Músico' : 'El Ahorcado';
+    titulo.childNodes[0].textContent = tituloBase;
+}
+
+/**
+ * Renderiza las letras incorrectas en el panel
+ */
+function renderizarLetrasIncorrectas() {
+    incorrectLettersContainer.innerHTML = '';
+    
+    if (letrasIncorrectas.length === 0) {
+        incorrectLettersContainer.innerHTML = '<p class="no-letters">Ninguna aún</p>';
+        return;
+    }
+    
+    letrasIncorrectas.forEach((letra, index) => {
+        const letraSpan = document.createElement('span');
+        letraSpan.className = 'incorrect-letter';
+        letraSpan.textContent = letra;
+        letraSpan.style.animationDelay = `${index * 0.1}s`;
+        incorrectLettersContainer.appendChild(letraSpan);
+    });
 }
 
 /**
@@ -177,19 +228,32 @@ function finalizarJuego(victoria) {
     
     if (victoria) {
         // Victoria
-        tituloFinal.textContent = '...a quien has Ayudado';
-        resultMessage.textContent = `¡Felicidades! Has salvado al abogado. La palabra era: ${palabraSecreta}`;
+        const mensajeFinal = currentTheme === 'musica' 
+            ? '...a quien has Ayudado' 
+            : '...a quien has Ayudado';
+        tituloFinal.textContent = mensajeFinal;
+        
+        const mensajeVictoria = currentTheme === 'musica'
+            ? `¡Felicidades! Has salvado al músico. La palabra era: ${palabraSecreta}`
+            : `¡Felicidades! Has salvado al ahorcado. La palabra era: ${palabraSecreta}`;
+        resultMessage.textContent = mensajeVictoria;
         resultMessage.classList.remove('lose', 'hidden');
         resultMessage.classList.add('win');
     } else {
         // Derrota
-        tituloFinal.textContent = '...que tengo aquí colgado';
+        const mensajeFinal = currentTheme === 'musica'
+            ? '...que tengo aquí colgado'
+            : '...que tengo aquí colgado';
+        tituloFinal.textContent = mensajeFinal;
         
         // Revelar palabra completa
         letrasDescubiertas = palabraSecreta.split('');
         renderizarPalabra(letrasDescubiertas, wordContainer);
         
-        resultMessage.textContent = `¡Oh no! El abogado ha sido ahorcado. La palabra era: ${palabraSecreta}`;
+        const mensajeDerrota = currentTheme === 'musica'
+            ? `¡Oh no! El músico ha sido ahorcado. La palabra era: ${palabraSecreta}`
+            : `¡Oh no! El ahorcado ha sido ahorcado. La palabra era: ${palabraSecreta}`;
+        resultMessage.textContent = mensajeDerrota;
         resultMessage.classList.remove('win', 'hidden');
         resultMessage.classList.add('lose');
     }
@@ -230,6 +294,29 @@ letterInput.addEventListener('input', (e) => {
 });
 
 restartBtn.addEventListener('click', inicializarJuego);
+
+// Event listeners para selector de tema
+themeGeneralBtn.addEventListener('click', () => {
+    if (currentTheme !== 'general') {
+        // Actualizar botones activos
+        themeGeneralBtn.classList.add('active');
+        themeMusicaBtn.classList.remove('active');
+        
+        // Reiniciar juego con nuevo tema
+        inicializarJuego('general');
+    }
+});
+
+themeMusicaBtn.addEventListener('click', () => {
+    if (currentTheme !== 'musica') {
+        // Actualizar botones activos
+        themeMusicaBtn.classList.add('active');
+        themeGeneralBtn.classList.remove('active');
+        
+        // Reiniciar juego con nuevo tema
+        inicializarJuego('musica');
+    }
+});
 
 // Inicializar el juego al cargar la página
 inicializarJuego();
