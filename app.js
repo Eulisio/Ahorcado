@@ -72,7 +72,12 @@ async function inicializarJuego(theme = currentTheme) {
         console.log('Palabra secreta (para debug):', palabraSecreta);
         
         // Obtener pista de la palabra actual
-        pistaActual = pistas[currentTheme][palabraSecreta] || 'No hay pista disponible';
+        if (pistas && pistas[currentTheme] && pistas[currentTheme][palabraSecreta]) {
+            pistaActual = pistas[currentTheme][palabraSecreta];
+        } else {
+            pistaActual = 'No hay pista disponible';
+            console.warn('Pista no encontrada para:', palabraSecreta, 'en tema:', currentTheme);
+        }
         pistaVisible = false;
         
         // Inicializar estado
@@ -340,7 +345,7 @@ letterInput.addEventListener('input', (e) => {
     }
 });
 
-restartBtn.addEventListener('click', inicializarJuego);
+restartBtn.addEventListener('click', () => inicializarJuego(currentTheme));
 
 // Event listeners para selector de tema
 themeGeneralBtn.addEventListener('click', () => {

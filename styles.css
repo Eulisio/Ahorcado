@@ -392,6 +392,7 @@ header h1:hover {
 
 #check-btn,
 #restart-btn {
+  display: block;
   padding: 15px 35px;
   font-size: 1.1rem;
   font-weight: 600;
@@ -466,7 +467,6 @@ header h1:hover {
 }
 
 #restart-btn {
-  display: block;
   margin: 20px auto 0;
 }
 
