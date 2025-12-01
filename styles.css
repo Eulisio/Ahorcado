@@ -38,7 +38,8 @@ body {
 
 .container {
   width: 100%;
-  max-width: 800px;
+  max-width: 1400px;
+  padding: 0 20px;
 }
 
 header {
@@ -133,27 +134,29 @@ header h1:hover {
 
 .game-wrapper {
   display: flex;
-  gap: 30px;
+  gap: 20px;
   align-items: flex-start;
+  justify-content: center;
 }
 
 .game-container {
   flex: 1;
+  max-width: 700px;
   background: var(--card-bg);
   backdrop-filter: blur(10px);
   border-radius: 24px;
-  padding: 40px;
+  padding: 30px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--border-color);
   animation: fadeInUp 0.8s ease-out;
 }
 
 .incorrect-letters-panel {
-  min-width: 200px;
-  max-width: 250px;
+  min-width: 180px;
+  max-width: 220px;
   background: var(--card-bg);
   backdrop-filter: blur(10px);
   border-radius: 24px;
-  padding: 25px;
+  padding: 20px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--border-color);
   animation: fadeInRight 0.8s ease-out;
 }
@@ -215,6 +218,103 @@ header h1:hover {
   box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
 }
 
+.hints-panel {
+  min-width: 180px;
+  max-width: 220px;
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--border-color);
+  animation: fadeInLeft 0.8s ease-out 0.1s both;
+}
+
+.hints-panel h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  text-align: center;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hint-btn {
+  width: 100%;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  color: white;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px var(--shadow-color);
+  position: relative;
+  overflow: hidden;
+}
+
+.hint-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.hint-btn:hover::before {
+  left: 100%;
+}
+
+.hint-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px var(--shadow-color);
+}
+
+.hint-btn:active {
+  transform: translateY(0);
+}
+
+.hint-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.hint-text {
+  margin-top: 15px;
+  padding: 15px;
+  background: rgba(99, 102, 241, 0.1);
+  border: 2px solid var(--primary-color);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  text-align: center;
+  animation: slideIn 0.5s ease-out;
+}
+
+
 .hangman-image {
   text-align: center;
   margin-bottom: 30px;
@@ -232,29 +332,33 @@ header h1:hover {
 }
 
 .word-display {
-  margin: 30px 0;
+  margin: 25px 0;
   text-align: center;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 #word-container {
-  display: flex;
+  display: inline-flex;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  font-size: 2.5rem;
+  flex-wrap: nowrap;
+  gap: 8px;
+  font-size: 2.2rem;
   font-weight: 600;
-  letter-spacing: 8px;
+  letter-spacing: 4px;
   color: var(--text-primary);
   min-height: 60px;
+  white-space: nowrap;
 }
 
 .letter-box {
   display: inline-block;
-  min-width: 40px;
-  padding: 10px;
+  min-width: 35px;
+  padding: 8px 6px;
   border-bottom: 4px solid var(--primary-color);
   text-align: center;
   animation: fadeIn 0.5s ease-out;
+  flex-shrink: 0;
 }
 
 .input-section {
@@ -420,6 +524,17 @@ header h1:hover {
   }
 }
 
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 @keyframes popIn {
   0% {
     opacity: 0;
@@ -455,16 +570,23 @@ header h1:hover {
     gap: 20px;
   }
 
-  .incorrect-letters-panel {
+  .hints-panel {
     max-width: 100%;
     width: 100%;
-    order: 2;
+    order: 1;
   }
 
   .game-container {
     padding: 25px;
-    order: 1;
+    order: 2;
   }
+
+  .incorrect-letters-panel {
+    max-width: 100%;
+    width: 100%;
+    order: 3;
+  }
+
 
   #word-container {
     font-size: 1.8rem;

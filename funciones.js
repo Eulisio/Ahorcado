@@ -23,6 +23,25 @@ export async function cargarPalabras(archivo = "words.json") {
 }
 
 /**
+ * Carga el archivo JSON de pistas
+ * @returns {Promise<Object>} Objeto con pistas organizadas por tema
+ */
+export async function cargarPistas() {
+  try {
+    const response = await fetch("hints.json");
+    if (!response.ok) {
+      throw new Error("Error al cargar el archivo de pistas");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error cargando pistas:", error);
+    throw error;
+  }
+}
+
+
+/**
  * Selecciona una palabra aleatoria del array
  * @param {Array} palabras - Array de objetos con palabras
  * @returns {string} Palabra secreta en mayúsculas

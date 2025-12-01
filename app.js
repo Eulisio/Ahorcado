@@ -5,6 +5,7 @@
 
 import {
     cargarPalabras,
+    cargarPistas,
     obtenerPalabraAleatoria,
     crearGuiones,
     validarInput,
@@ -26,6 +27,9 @@ let juegoTerminado = false;
 let letrasUsadas = new Set();
 let currentTheme = 'general'; // Tema actual: 'general' o 'musica'
 let letrasIncorrectas = []; // Array de letras incorrectas
+let pistas = null; // Objeto con todas las pistas
+let pistaActual = ''; // Pista de la palabra actual
+let pistaVisible = false; // Si la pista está visible
 
 // Elementos del DOM
 const wordContainer = document.getElementById('word-container');
@@ -40,6 +44,8 @@ const tituloFinal = document.getElementById('titulo-final');
 const themeGeneralBtn = document.getElementById('theme-general');
 const themeMusicaBtn = document.getElementById('theme-musica');
 const incorrectLettersContainer = document.getElementById('incorrect-letters-container');
+const showHintBtn = document.getElementById('show-hint-btn');
+const hintContainer = document.getElementById('hint-container');
 
 /**
  * Inicializa el juego
@@ -50,6 +56,11 @@ async function inicializarJuego(theme = currentTheme) {
         // Actualizar tema actual
         currentTheme = theme;
         
+        // Cargar pistas si aún no están cargadas
+        if (!pistas) {
+            pistas = await cargarPistas();
+        }
+        
         // Determinar archivo de palabras según el tema
         const archivo = theme === 'musica' ? 'words2.json' : 'words.json';
         
@@ -59,6 +70,10 @@ async function inicializarJuego(theme = currentTheme) {
         // Obtener palabra aleatoria
         palabraSecreta = obtenerPalabraAleatoria(palabras);
         console.log('Palabra secreta (para debug):', palabraSecreta);
+        
+        // Obtener pista de la palabra actual
+        pistaActual = pistas[currentTheme][palabraSecreta] || 'No hay pista disponible';
+        pistaVisible = false;
         
         // Inicializar estado
         letrasDescubiertas = crearGuiones(palabraSecreta);
@@ -81,6 +96,9 @@ async function inicializarJuego(theme = currentTheme) {
         
         // Limpiar panel de letras incorrectas
         renderizarLetrasIncorrectas();
+        
+        // Resetear panel de pistas
+        resetearPista();
         
         // Limpiar mensajes
         resultMessage.classList.add('hidden');
@@ -275,6 +293,35 @@ function mostrarError(mensaje) {
 }
 
 /**
+ * Muestra u oculta la pista
+ */
+function togglePista() {
+    if (juegoTerminado) return;
+    
+    pistaVisible = !pistaVisible;
+    
+    if (pistaVisible) {
+        hintContainer.textContent = pistaActual;
+        hintContainer.classList.remove('hidden');
+        showHintBtn.textContent = 'Ocultar Pista';
+    } else {
+        hintContainer.classList.add('hidden');
+        showHintBtn.textContent = 'Ver Pista';
+    }
+}
+
+/**
+ * Resetea el panel de pistas
+ */
+function resetearPista() {
+    pistaVisible = false;
+    hintContainer.classList.add('hidden');
+    hintContainer.textContent = '';
+    showHintBtn.textContent = 'Ver Pista';
+    showHintBtn.disabled = false;
+}
+
+/**
  * Event Listeners
  */
 checkBtn.addEventListener('click', procesarLetra);
@@ -317,6 +364,9 @@ themeMusicaBtn.addEventListener('click', () => {
         inicializarJuego('musica');
     }
 });
+
+// Event listener para botón de pista
+showHintBtn.addEventListener('click', togglePista);
 
 // Inicializar el juego al cargar la página
 inicializarJuego();
