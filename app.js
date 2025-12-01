@@ -242,7 +242,7 @@ function finalizarJuego(victoria) {
     } else {
         // Derrota
         const mensajeFinal = currentTheme === 'musica'
-            ? '...que tengo aquí colgado'
+            ? '...que se ha liado'
             : '...que tengo aquí colgado';
         tituloFinal.textContent = mensajeFinal;
         
@@ -251,8 +251,8 @@ function finalizarJuego(victoria) {
         renderizarPalabra(letrasDescubiertas, wordContainer);
         
         const mensajeDerrota = currentTheme === 'musica'
-            ? `¡Oh no! El músico ha sido ahorcado. La palabra era: ${palabraSecreta}`
-            : `¡Oh no! El ahorcado ha sido ahorcado. La palabra era: ${palabraSecreta}`;
+            ? `¡Oh no! El músico se ha liado. La palabra era: ${palabraSecreta}`
+            : `¡Oh no! Ha sido ahorcado. La palabra era: ${palabraSecreta}`;
         resultMessage.textContent = mensajeDerrota;
         resultMessage.classList.remove('win', 'hidden');
         resultMessage.classList.add('lose');
